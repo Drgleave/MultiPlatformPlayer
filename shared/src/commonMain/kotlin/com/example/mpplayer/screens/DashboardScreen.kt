@@ -3,6 +3,9 @@ package com.example.mpplayer.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +22,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
@@ -37,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -79,6 +85,9 @@ fun DashboardScreen (component: ScreenAComponent) {
     }
 
     component.onEvent(ScreenAEvent.UpdateText("0"))
+    val state = rememberScrollState()
+    val stateM = rememberLazyListState()
+    LaunchedEffect(Unit) { state.animateScrollTo(100) }
 
     var playPos = 0
     MaterialTheme {
@@ -94,7 +103,7 @@ fun DashboardScreen (component: ScreenAComponent) {
         (if (playerState.currentItemIndex >= 0) audioList[playerState.currentItemIndex].duration else "0:00")?.let {
 
             Scaffold() {
-                Column(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.2f))){
+                Column(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.2f)).verticalScroll(state)){
                     Box(modifier = Modifier.background(Color.Black.copy(alpha = 0.5f))) {
                         Row(modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -155,8 +164,8 @@ fun DashboardScreen (component: ScreenAComponent) {
                                     modifier = Modifier.padding(10.dp).size(50.dp).clip(RoundedCornerShape(35.dp))
                                 )
                                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)){
-                                    Text(audioList[playPos].name!!, fontSize = 16.sp, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                    Text(audioList[playPos].artists!!, fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.White)
+                                    Text(audioList[playPos].name!!, fontSize = 12.sp, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                    Text(audioList[playPos].artists!!, fontSize = 10.sp, fontWeight = FontWeight.Normal, color = Color.White)
                                 }
                                 Box(Modifier.size(50.dp)){
                                     if (!playerState.isBuffering){
@@ -188,6 +197,8 @@ fun DashboardScreen (component: ScreenAComponent) {
                 }
 
             }
+
+
 
         }
 
@@ -230,6 +241,7 @@ fun ColumnScope.MusicList(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun TrackItem(
     audio: Track,
@@ -251,15 +263,19 @@ fun TrackItem(
             modifier = Modifier.padding(10.dp).size(50.dp).clip(RoundedCornerShape(15.dp))
         )
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)){
-            Text(audio.name!!, fontSize = 16.sp, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(audio.artists!!, fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.White)
+            Text(audio.name!!, fontSize = 12.sp, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(audio.artists!!, fontSize = 9.sp, fontWeight = FontWeight.Normal, color = Color.White)
         }
-        Text(
-            audio.duration!!,
-            fontSize = 14.sp,
-            color = Color.White,
-            modifier = Modifier.padding(10.dp).background(color, RoundedCornerShape(5.dp)).padding(3.dp)
-        )
+
+        Box(Modifier.size(30.dp).padding(1.dp)) {
+            Icon(
+                painter = painterResource("more.png"),
+                contentDescription = "",
+                modifier = Modifier.size(30.dp),
+                tint = Color.White
+            )
+
+        }
     }
 }
 
@@ -307,18 +323,18 @@ fun PlaylistItem(
     onClick: () -> Unit){
     val color = if (isPlaying) Color.Blue.copy(alpha = 0.9f) else Color.DarkGray.copy(alpha = 0.5f)
     val backgroundColor = if (isPlaying) Color.Blue else Color.DarkGray
-    Box(modifier = Modifier.clickable(onClick = onClick).size(200.dp).padding(vertical = 20.dp, horizontal = 10.dp)
-        .background(Color.DarkGray, RoundedCornerShape(25.dp))) {
+    Box(modifier = Modifier.clickable(onClick = onClick).size(150.dp).padding(vertical = 20.dp, horizontal = 10.dp)
+        .background(Color.DarkGray, RoundedCornerShape(8.dp))) {
         KamelImage(
             asyncPainterResource(playlist.images.toString()),
             contentDescription = null,
             modifier = Modifier.matchParentSize().padding(4.dp)
         )
 
-        Row(modifier = Modifier.width(150.dp).align(alignment = Alignment.BottomCenter).background(backgroundColor, RoundedCornerShape(15.dp)).padding(5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically){
+        Row(modifier = Modifier.width(150.dp).align(alignment = Alignment.BottomCenter).background(backgroundColor, RoundedCornerShape(8.dp)).padding(5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically){
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)){
-                Text(playlist.name!!, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text("$playlistSize Tracks", fontSize = 12.sp, fontWeight = FontWeight.Normal, color = Color.White)
+                Text(playlist.name!!, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text("$playlistSize Tracks", fontSize = 9.sp, fontWeight = FontWeight.Normal, color = Color.White)
             }
 
             Box(Modifier.size(30.dp).padding(1.dp)) {
@@ -326,7 +342,7 @@ fun PlaylistItem(
                     onClick = { if (isPlaying) onPause() else onPlay() },
                     modifier = Modifier.size(30.dp),
                     shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
                 ) {
                     Icon(
                         painter = if (isPlaying) painterResource("pause.png") else painterResource("play.png"),
@@ -337,7 +353,7 @@ fun PlaylistItem(
                 }
 
             }
-            
+
         }
 
     }
