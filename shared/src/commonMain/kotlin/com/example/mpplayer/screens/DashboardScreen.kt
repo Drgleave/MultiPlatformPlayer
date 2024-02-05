@@ -105,17 +105,17 @@ fun DashboardScreen (component: ScreenAComponent) {
             Scaffold() {
                 Column(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.2f)).verticalScroll(state)){
                     Box(modifier = Modifier.background(Color.Black.copy(alpha = 0.5f))) {
-                        Row(modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
+                        Row(modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp).height(30.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)){
                             Text("RadioHead",
-                                fontSize = 18.sp,
+                                fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White)
                             Box(modifier = Modifier.weight(1F))
                             Image(painter = painterResource("3.png"),
                                 contentDescription = null,
-                                modifier = Modifier.padding(8.dp).size(40.dp).clip(RoundedCornerShape(25.dp)))
+                                modifier = Modifier.padding(2.dp).size(50.dp).clip(RoundedCornerShape(25.dp)))
                         }
                     }
 
@@ -260,7 +260,7 @@ fun TrackItem(
         KamelImage(
             asyncPainterResource(audio.images!!),
             contentDescription = null,
-            modifier = Modifier.padding(10.dp).size(50.dp).clip(RoundedCornerShape(15.dp))
+            modifier = Modifier.padding(10.dp).size(40.dp).clip(RoundedCornerShape(15.dp))
         )
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)){
             Text(audio.name!!, fontSize = 12.sp, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -271,7 +271,7 @@ fun TrackItem(
             Icon(
                 painter = painterResource("more.png"),
                 contentDescription = "",
-                modifier = Modifier.size(30.dp),
+                modifier = Modifier.size(12.dp),
                 tint = Color.White
             )
 
