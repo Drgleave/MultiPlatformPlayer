@@ -1,4 +1,4 @@
-package com.example.mpplayer.screens
+package com.example.mpplayer.navigation.playlists
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.mpplayer.navigation.ScreenBComponent
 
 
-class PlaylistScreen (text: String, component: ScreenBComponent): Screen {
+class PlaylistsScreen: Screen {
 
 
     @Composable
@@ -40,18 +40,18 @@ class PlaylistScreen (text: String, component: ScreenBComponent): Screen {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .clickable {
-
+                        navigator.push(PlaylistInfoScreen())
                     },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     modifier = Modifier.size(24.dp),
                     painter = rememberVectorPainter(Icons.Default.Info),
-                    contentDescription = "Legal",
+                    contentDescription = "Playlist Info",
                 )
                 Text(
                     modifier = Modifier.padding(16.dp),
-                    text = "Legal"
+                    text = "Playlist Info"
                 )
             }
             Divider(

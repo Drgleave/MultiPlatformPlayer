@@ -1,4 +1,4 @@
-package com.example.mpplayer.screens
+package com.example.mpplayer.navigation.search
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -22,10 +22,12 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.mpplayer.navigation.ScreenBComponent
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import tabs.settings.LegalScreen
 
 
-class PlaylistScreen (text: String, component: ScreenBComponent): Screen {
 
+class SearchScreen : Screen {
 
     @Composable
     override fun Content() {
@@ -40,7 +42,7 @@ class PlaylistScreen (text: String, component: ScreenBComponent): Screen {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .clickable {
-
+                        navigator.push(LegalScreen())
                     },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -61,5 +63,6 @@ class PlaylistScreen (text: String, component: ScreenBComponent): Screen {
             )
         }
     }
+
 
 }

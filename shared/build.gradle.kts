@@ -65,6 +65,21 @@ kotlin {
             implementation(libs.squareup.okio)
             implementation(libs.coroutines)
 
+            implementation("cafe.adriel.voyager:voyager-navigator:1.0.0")
+
+            // Screen Model
+            implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
+
+            // BottomSheetNavigator
+            implementation("cafe.adriel.voyager:voyager-bottom-sheet-navigator:1.0.0")
+
+            // TabNavigator
+            implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.0")
+
+            // Transitions
+            implementation("cafe.adriel.voyager:voyager-transitions:1.0.0")
+
+
         }
 
         commonTest.dependencies {
